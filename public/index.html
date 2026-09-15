@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>SFXR — Sound effects for people who make things.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Vazirmatn:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<main class="app">
+  <header class="top"><div class="brand">SFXR</div><div class="tagline">SOUND EFFECTS FOR PEOPLE WHO MAKE THINGS.</div></header>
+  <section class="hero">
+    <h1>صحنه رو بگو.<br>صداهاشو پیدا کن.</h1>
+    <p>توضیح فارسی صحنه‌ات رو به عناصر صوتی قابل جست‌وجو تبدیل کن.</p>
+    <div class="switch"><button id="sceneBtn" class="active">SCENE</button><button id="searchBtn">SEARCH</button></div>
+  </section>
+  <section class="card">
+    <textarea id="text" placeholder="صحنه یا داستانت رو تعریف کن... مثلاً: یک مرد در یک خانه قدیمی نشسته، بیرون باران شدیدی می‌بارد، ناگهان صدای در می‌آید و چند نفر با عجله از راه‌پله بالا می‌روند."></textarea>
+    <div class="controls">
+      <div id="details" class="details"><button data-detail="low">کم</button><button data-detail="medium" class="active">متوسط</button><button data-detail="high">زیاد</button><button data-detail="insane">خیلی زیاد</button></div>
+      <button id="primary" class="primary">پیدا کردن صداها</button>
+    </div>
+    <div id="error" class="error" hidden></div>
+  </section>
+  <section class="results">
+    <div class="results-head"><h2 id="resultsTitle">صداهای پیشنهادی صحنه</h2><span id="count" class="count" hidden></span></div>
+    <div id="results"><div class="empty">هنوز چیزی پیدا نشده.</div></div>
+  </section>
+  <footer class="footer">SFXR / v0.3 — built for filmmakers, editors & sound designers.</footer>
+</main>
+<script src="/script.js"></script>
+</body>
+</html>
