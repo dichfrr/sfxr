@@ -4,15 +4,6 @@ import { useState } from 'react';
 
 type Sfx = { title: string; query: string; category: string };
 
-const examples: Sfx[] = [
-  { title: 'باران شدید بیرون خانه', query: 'heavy rain outside old house interior', category: 'WEATHER' },
-  { title: 'صدای فضای داخلی خانه قدیمی', query: 'old house interior room tone', category: 'ROOM TONE' },
-  { title: 'در زدن ناگهانی', query: 'sudden knocking on wooden door', category: 'DOOR' },
-  { title: 'باز و بسته شدن در', query: 'old wooden door opening and closing', category: 'FOLEY' },
-  { title: 'دویدن چند نفر روی راه‌پله', query: 'multiple people running up wooden stairs', category: 'FOOTSTEPS' },
-  { title: 'بسته شدن محکم در اتاق', query: 'hard wooden door slam inside house', category: 'IMPACT' },
-];
-
 export default function Home() {
   const [mode, setMode] = useState<'scene' | 'search'>('scene');
   const [text, setText] = useState('');
@@ -23,14 +14,35 @@ export default function Home() {
 
   async function analyze() {
     if (!text.trim()) return;
-    setLoading(true); setError('');
+    setLoading(true);
+    setError('');
+
     try {
-      const res = await fetch('/api/analyze', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text, mode, detail }) });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'خطا در تحلیل');
-      setResults(data.results || []);
-    } catch (e) { setError(e instanceof Error ? e.message : 'خطای ناشناخته'); }
-    finally { setLoading(false); }
+      const res = await fetch('/api/analyze', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text, mode, detail }),
+      });
+
+      const raw = await res.text();
+      let data: any = null;
+
+      try {
+        data = JSON.parse(raw);
+      } catch {
+        throw new Error(`سرور پاسخ قابل خواندن نداد (${res.status}): ${raw.slice(0, 300)}`);
+      }
+
+      if (!res.ok) {
+        throw new Error(data?.error || `خطای سرور (${res.status})`);
+      }
+
+      setResults(Array.isArray(data?.results) ? data.results : []);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'خطای ناشناخته');
+    } finally {
+      setLoading(false);
+    }
   }
 
   return <main className="app">
